@@ -4,13 +4,14 @@
 
 특정 프로젝트 저장소에 두면 그 저장소의 수명에 규약이 종속되므로 독립 저장소로 분리했다.
 
-## 문서
+## 구성
 
-| 문서 | 내용 |
+| 경로 | 내용 |
 |---|---|
-| [`0_DOC_CONVENTION.md`](./0_DOC_CONVENTION.md) | 프로젝트 문서 관리 규약 — SSOT 원칙, 문서 구성, Notion↔GitHub 경계 |
+| [`0_DOC_CONVENTION.md`](./0_DOC_CONVENTION.md) | 문서 관리 규약 — SSOT 원칙, 문서 구성, Notion↔GitHub 경계 |
+| [`templates/`](./templates/) | 각 PC `~/.claude/`에 들어가는 파일의 백업본 |
 
-## 적용 방법
+## 규약 적용 방법
 
 새 프로젝트의 `CLAUDE.md`에 아래를 넣는다. **파일을 복사하지 않는다.**
 
@@ -29,3 +30,14 @@
 https://github.com/DeuklyoungKo/conventions/blob/main/0_DOC_CONVENTION.md
 읽고 이 방식으로 문서를 정리해줘.
 ```
+
+## 새 PC 세팅
+
+```bash
+git clone git@github.com:DeuklyoungKo/conventions.git
+mkdir -p ~/.claude
+cp conventions/templates/CLAUDE.global.md ~/.claude/CLAUDE.md
+cp conventions/templates/android-vibe-coding-sop.md ~/.claude/
+```
+
+상세는 [`templates/README.md`](./templates/README.md) 참조.
