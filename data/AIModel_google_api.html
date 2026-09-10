@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google AI 모델별 무료 사용량(Rate Limits) 및 주요 용도 요약</title>
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --badge-unlimited-bg: #dcfce7;
+      --badge-unlimited-text: #166534;
+      --badge-high-bg: #e0f2fe;
+      --badge-high-text: #0369a1;
+      --badge-zero-bg: #f1f5f9;
+      --badge-zero-text: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 32px 20px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .search-box {
+      padding: 8px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      width: 280px;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus {
+      border-color: var(--primary);
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      letter-spacing: 0.02em;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    .rank {
+      font-weight: 700;
+      color: #64748b;
+      width: 48px;
+      text-align: center;
+    }
+
+    .model-name {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 9999px;
+    }
+
+    .badge-unlimited {
+      background-color: var(--badge-unlimited-bg);
+      color: var(--badge-unlimited-text);
+    }
+
+    .badge-high {
+      background-color: var(--badge-high-bg);
+      color: var(--badge-high-text);
+    }
+
+    .badge-zero {
+      background-color: var(--badge-zero-bg);
+      color: var(--badge-zero-text);
+    }
+
+    .purpose-cell {
+      color: #334155;
+      white-space: normal;
+      min-width: 260px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Google AI 모델별 무료 사용 한도 및 주요 용도</h1>
+      <p class="subtitle">일일 요청 한도(RPD) 기준 내림차순 정렬 및 모델별 핵심 활용 목적</p>
+    </header>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">모델별 Rate Limits 및 주요 용도 (무료 사용량 많은 순)</div>
+        <input type="text" id="modelSearch" class="search-box" placeholder="모델명, 용도 또는 카테고리 검색..." onkeyup="filterTable()">
+      </div>
+      <div class="table-container">
+        <table id="modelTable">
+          <thead>
+            <tr>
+              <th class="rank">순위</th>
+              <th>모델명</th>
+              <th>카테고리</th>
+              <th>RPD (일일 요청 수)</th>
+              <th>TPM (분당 토큰 수)</th>
+              <th>RPM (분당 요청 수)</th>
+              <th>주요 용도</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="rank">1</td>
+              <td class="model-name">Gemini 2.5 Flash Native Audio Dialog</td>
+              <td><span class="category-badge">Live API</span></td>
+              <td><span class="badge badge-unlimited">Unlimited</span></td>
+              <td>1M (1,000,000)</td>
+              <td>Unlimited</td>
+              <td class="purpose-cell">실시간 음성 대화 및 양방향 오디오 스트리밍 상호작용</td>
+            </tr>
+            <tr>
+              <td class="rank">2</td>
+              <td class="model-name">Gemini 3 Flash Live</td>
+              <td><span class="category-badge">Live API</span></td>
+              <td><span class="badge badge-unlimited">Unlimited</span></td>
+              <td>65K (65,000)</td>
+              <td>Unlimited</td>
+              <td class="purpose-cell">실시간 초저지연 멀티모달 상호작용 및 라이브 스트리밍</td>
+            </tr>
+            <tr>
+              <td class="rank">3</td>
+              <td class="model-name">Gemini 3.5 Live Translate</td>
+              <td><span class="category-badge">Live API</span></td>
+              <td><span class="badge badge-unlimited">Unlimited</span></td>
+              <td>20K (20,000)</td>
+              <td>Unlimited</td>
+              <td class="purpose-cell">실시간 다국어 음성/텍스트 동시 통역 및 번역</td>
+            </tr>
+            <tr>
+              <td class="rank">4</td>
+              <td class="model-name">Gemini 3.5 Transcribe Live</td>
+              <td><span class="category-badge">Live API</span></td>
+              <td><span class="badge badge-unlimited">Unlimited</span></td>
+              <td>20K (20,000)</td>
+              <td>Unlimited</td>
+              <td class="purpose-cell">실시간 오디오 스트리밍 음성 인식(STT) 및 자막 생성</td>
+            </tr>
+            <tr>
+              <td class="rank">5</td>
+              <td class="model-name">Gemma 4 26B</td>
+              <td><span class="category-badge">Other models</span></td>
+              <td><span class="badge badge-high">14.4K (14,400)</span></td>
+              <td>16K</td>
+              <td>30</td>
+              <td class="purpose-cell">고성능 오픈 가중치 경량 언어 모델 (추론, 텍스트 분석, 온프레미스)</td>
+            </tr>
+            <tr>
+              <td class="rank">6</td>
+              <td class="model-name">Gemma 4 31B</td>
+              <td><span class="category-badge">Other models</span></td>
+              <td><span class="badge badge-high">14.4K (14,400)</span></td>
+              <td>16K</td>
+              <td>30</td>
+              <td class="purpose-cell">대규모 오픈 가중치 언어 모델 (복잡한 텍스트 작업 및 코딩 보조)</td>
+            </tr>
+            <tr>
+              <td class="rank">7</td>
+              <td class="model-name">Gemini Embedding 1</td>
+              <td><span class="category-badge">Other models</span></td>
+              <td><span class="badge badge-high">1,000</span></td>
+              <td>30K</td>
+              <td>100</td>
+              <td class="purpose-cell">텍스트 임베딩 생성 (RAG 검색 증강, 시맨틱 검색, 문서 분류)</td>
+            </tr>
+            <tr>
+              <td class="rank">8</td>
+              <td class="model-name">Gemini Embedding 2</td>
+              <td><span class="category-badge">Other models</span></td>
+              <td><span class="badge badge-high">1,000</span></td>
+              <td>30K</td>
+              <td>100</td>
+              <td class="purpose-cell">고차원 텍스트/멀티모달 임베딩 및 유사도 벡터 검색</td>
+            </tr>
+            <tr>
+              <td class="rank">9</td>
+              <td class="model-name">Gemini 3.1 Flash Lite</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td><span class="badge badge-high">500</span></td>
+              <td>250K</td>
+              <td>15</td>
+              <td class="purpose-cell">경량화된 초고속 텍스트 처리 및 대규모 일괄(Batch) 분석</td>
+            </tr>
+            <tr>
+              <td class="rank">10</td>
+              <td class="model-name">Gemini 3.5 Flash Lite</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td><span class="badge badge-high">500</span></td>
+              <td>250K</td>
+              <td>15</td>
+              <td class="purpose-cell">최신 경량 고효율 텍스트 생성, 요약 및 일상 대화</td>
+            </tr>
+            <tr>
+              <td class="rank">11</td>
+              <td class="model-name">Antigravity</td>
+              <td><span class="category-badge">Agents</span></td>
+              <td>100</td>
+              <td>100K</td>
+              <td>60</td>
+              <td class="purpose-cell">자율 에이전트 작업 실행, 워크플로우 자동화 및 툴 연동</td>
+            </tr>
+            <tr>
+              <td class="rank">12</td>
+              <td class="model-name">Gemini 3.5 Transcribe</td>
+              <td><span class="category-badge">Live API</span></td>
+              <td>25</td>
+              <td>10K</td>
+              <td>3</td>
+              <td class="purpose-cell">오디오 파일 일괄 음성 인식(STT) 및 스크립트 변환</td>
+            </tr>
+            <tr>
+              <td class="rank">13</td>
+              <td class="model-name">Gemini 2.5 Flash Lite</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td>20</td>
+              <td>250K</td>
+              <td>10</td>
+              <td class="purpose-cell">초저비용 고속 텍스트 생성 및 데이터 파싱/분석</td>
+            </tr>
+            <tr>
+              <td class="rank">14</td>
+              <td class="model-name">Gemini 2.5 Flash</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td>20</td>
+              <td>250K</td>
+              <td>5</td>
+              <td class="purpose-cell">범용 고속 멀티모달 분석, 요약 및 질의응답</td>
+            </tr>
+            <tr>
+              <td class="rank">15</td>
+              <td class="model-name">Gemini 3 Flash</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td>20</td>
+              <td>250K</td>
+              <td>5</td>
+              <td class="purpose-cell">차세대 범용 멀티모달 추론 및 고속 텍스트 생성</td>
+            </tr>
+            <tr>
+              <td class="rank">16</td>
+              <td class="model-name">Gemini 3.5 Flash</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td>20</td>
+              <td>250K</td>
+              <td>5</td>
+              <td class="purpose-cell">성능과 속도의 균형을 맞춘 주력 범용 텍스트/멀티모달 작업</td>
+            </tr>
+            <tr>
+              <td class="rank">17</td>
+              <td class="model-name">Gemini 3.6 Flash</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td>20</td>
+              <td>250K</td>
+              <td>5</td>
+              <td class="purpose-cell">고도화된 코딩 및 구조적 데이터 처리용 Flash 모델</td>
+            </tr>
+            <tr>
+              <td class="rank">18</td>
+              <td class="model-name">Gemini 3.7 Flash</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td>20</td>
+              <td>250K</td>
+              <td>5</td>
+              <td class="purpose-cell">복합 추론 및 하이브리드 사고(Thinking) 처리 지원 모델</td>
+            </tr>
+            <tr>
+              <td class="rank">19</td>
+              <td class="model-name">Gemini 3.8 Flash</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td>20</td>
+              <td>250K</td>
+              <td>5</td>
+              <td class="purpose-cell">최신 고성능 범용 Flash 모델 (복합 추론 및 다국어 지원)</td>
+            </tr>
+            <tr>
+              <td class="rank">20</td>
+              <td class="model-name">Gemini Robotics ER 2 Preview</td>
+              <td><span class="category-badge">Other models</span></td>
+              <td>20</td>
+              <td>250K</td>
+              <td>5</td>
+              <td class="purpose-cell">로보틱스 제어, 환경 인지(Embodied Reasoning) 및 공간 분석</td>
+            </tr>
+            <tr>
+              <td class="rank">21</td>
+              <td class="model-name">Gemini 2.5 Flash TTS</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td>10</td>
+              <td>10K</td>
+              <td>3</td>
+              <td class="purpose-cell">텍스트-음성 변환 (고품질 음성 합성, TTS)</td>
+            </tr>
+            <tr>
+              <td class="rank">22</td>
+              <td class="model-name">Gemini 3.1 Flash TTS</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td>10</td>
+              <td>10K</td>
+              <td>3</td>
+              <td class="purpose-cell">감정 표현 및 자연스러운 음색의 실시간 음성 합성</td>
+            </tr>
+            <tr>
+              <td class="rank">23</td>
+              <td class="model-name">Computer Use Preview</td>
+              <td><span class="category-badge">Other models</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">화면 인식 및 마우스/키보드 자동 조작 에이전트</td>
+            </tr>
+            <tr>
+              <td class="rank">24</td>
+              <td class="model-name">Deep Research Pro Preview</td>
+              <td><span class="category-badge">Agents</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">다단계 웹 탐색 및 심층 리서치/보고서 작성 에이전트</td>
+            </tr>
+            <tr>
+              <td class="rank">25</td>
+              <td class="model-name">Gemini 2 Flash</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">이전 세대 표준 고속 멀티모달 텍스트 생성 모델</td>
+            </tr>
+            <tr>
+              <td class="rank">26</td>
+              <td class="model-name">Gemini 2 Flash Lite</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">이전 세대 초경량 고속 텍스트 처리 모델</td>
+            </tr>
+            <tr>
+              <td class="rank">27</td>
+              <td class="model-name">Gemini 2.5 Pro</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">고난도 추론, 코딩 및 심층 문서 분석용 고성능 모델</td>
+            </tr>
+            <tr>
+              <td class="rank">28</td>
+              <td class="model-name">Gemini 2.5 Pro TTS</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">전문 음성 콘텐츠 제작용 스튜디오급 고품질 음성 합성</td>
+            </tr>
+            <tr>
+              <td class="rank">29</td>
+              <td class="model-name">Gemini 3.1 Pro</td>
+              <td><span class="category-badge">Text-out models</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">복합 다단계 추론, 수학/코딩 및 논리 분석 플래그십 모델</td>
+            </tr>
+            <tr>
+              <td class="rank">30</td>
+              <td class="model-name">Gemini Omni 1.1 Flash</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">통합 옴니채널 멀티모달(시각+청각+텍스트) 실시간 처리</td>
+            </tr>
+            <tr>
+              <td class="rank">31</td>
+              <td class="model-name">Gemini Omni Flash</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">올인원 실시간 멀티모달 입출력 처리 모델</td>
+            </tr>
+            <tr>
+              <td class="rank">32</td>
+              <td class="model-name">Lyria 3 Clip</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">짧은 오디오 클립 및 배경음악 생성</td>
+            </tr>
+            <tr>
+              <td class="rank">33</td>
+              <td class="model-name">Lyria 3 Pro</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">전문가용 고품질 음악 작곡 및 오디오 사운드트랙 생성</td>
+            </tr>
+            <tr>
+              <td class="rank">34</td>
+              <td class="model-name">Nano Banana (Gemini 2.5 Flash Preview Image)</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">이미지 생성 및 시각 자료 합성 프리뷰</td>
+            </tr>
+            <tr>
+              <td class="rank">35</td>
+              <td class="model-name">Nano Banana 2 (Gemini 3.1 Flash Image)</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">고해상도 이미지 고속 생성 및 스타일 변환</td>
+            </tr>
+            <tr>
+              <td class="rank">36</td>
+              <td class="model-name">Nano Banana 2 Lite (Gemini 3.1 Flash Lite Image)</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">경량화된 빠른 이미지 생성 및 편집</td>
+            </tr>
+            <tr>
+              <td class="rank">37</td>
+              <td class="model-name">Nano Banana Pro (Gemini 3 Pro Image)</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>0</td>
+              <td>0</td>
+              <td class="purpose-cell">전문가급 고품질 비주얼/이미지 생성 및 세밀 편집</td>
+            </tr>
+            <tr>
+              <td class="rank">38</td>
+              <td class="model-name">Veo 3 Fast Generate</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>-</td>
+              <td>0</td>
+              <td class="purpose-cell">고속 비디오/동영상 생성 및 클립 렌더링</td>
+            </tr>
+            <tr>
+              <td class="rank">39</td>
+              <td class="model-name">Veo 3 Generate</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>-</td>
+              <td>0</td>
+              <td class="purpose-cell">고화질 시네마틱 동영상 생성 및 애니메이션 제작</td>
+            </tr>
+            <tr>
+              <td class="rank">40</td>
+              <td class="model-name">Veo 3 Lite Generate</td>
+              <td><span class="category-badge">Multi-modal</span></td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td>-</td>
+              <td>0</td>
+              <td class="purpose-cell">경량화된 비디오 생성 및 짧은 모션 그래픽 제작</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Grounding Tools Section -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">부가 도구(Grounding Tools) 무료 한도 및 주요 용도</div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>적용 모델</th>
+              <th>일일 한도 (RPD)</th>
+              <th>주요 용도</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 600;">Search Grounding</td>
+              <td>Gemini 2, Gemini 2.5, Default</td>
+              <td><span class="badge badge-high">1.5K (1,500)</span></td>
+              <td class="purpose-cell">구글 실시간 웹 검색 결과를 답변에 주입하여 최신 정보 제공 및 환각(Hallucination) 방지</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 600;">Map Grounding</td>
+              <td>
+                Gemini 2 Flash, 2.5 Flash, 2.5 Flash Lite, 3.1 Flash Lite, 3.1 Flash TTS,<br>
+                3.5 Flash Lite, 3.5 Transcribe, Deep Research Pro Preview, Computer Use Preview, Robotics ER 2 Preview
+              </td>
+              <td><span class="badge badge-high">500</span></td>
+              <td class="purpose-cell">구글 지도 DB를 연동하여 위치, 장소 평점, 영업 시간, 경로 등 지리 정보 검증 및 질의응답</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 600;">한도 없음 / 비활성 (0)</td>
+              <td>Gemini 3 (Search), Gemini 2.5 Pro, Gemini 3 Flash, Gemini 3.1 Pro, Gemini 3.5 Flash ~ 3.8 Flash (Map)</td>
+              <td><span class="badge badge-zero">0</span></td>
+              <td class="purpose-cell">무료 티어 내 해당 그라운딩 도구 미지원 또는 유료 계정 연동 필요</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function filterTable() {
+      const input = document.getElementById("modelSearch");
+      const filter = input.value.toLowerCase();
+      const table = document.getElementById("modelTable");
+      const tr = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < tr.length; i++) {
+        const modelTd = tr[i].getElementsByTagName("td")[1];
+        const categoryTd = tr[i].getElementsByTagName("td")[2];
+        const purposeTd = tr[i].getElementsByTagName("td")[6];
+        if (modelTd || categoryTd || purposeTd) {
+          const textValue = (modelTd ? modelTd.textContent : "") + " " +
+                            (categoryTd ? categoryTd.textContent : "") + " " +
+                            (purposeTd ? purposeTd.textContent : "");
+          if (textValue.toLowerCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>

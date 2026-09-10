@@ -250,10 +250,22 @@ npx skills add vercel-labs/agent-skills
 # 글로벌 Claude Code 설정
 
 ## 실행 환경
-- OS: Windows 11 + WSL2 (Ubuntu)
-- 모든 CLI 명령은 Linux/Ubuntu 환경에서 실행
-- 프로젝트 파일: `/home/<username>/projects/` (성능 우선)
-- Windows 파일: `/mnt/c/` 경유 가능 (성능 저하 있음)
+
+> ⚠️ **이 섹션은 머신 종속이다.** 새 PC에 복원했다면 이 부분을 그 PC에 맞게 고친다.
+
+- **OS**: Windows 10/11 + WSL2 (Ubuntu) + Docker Desktop
+- **프로젝트 파일**: Windows 측 `Work` / `Work_Gon` 폴더 (드라이브 문자는 PC마다 다름)
+- **CLI**: PowerShell 기본. Linux 전용 도구가 필요할 때만 WSL 사용
+
+**WSL에서 프로젝트에 접근할 때**
+
+```bash
+cd /mnt/d/Work_Gon/<프로젝트>   # 드라이브가 D인 경우
+```
+
+`/mnt/`를 경유하는 파일 I/O는 느리다. **`npm install`·빌드처럼 파일을 많이 건드리는 작업은 PowerShell에서 직접 실행**한다. WSL은 `jq`·`rg` 같은 Linux 도구가 필요할 때만 쓴다.
+
+프로젝트를 WSL `/home/`으로 옮기면 I/O는 빨라지지만, Windows 쪽 편집기·도구와의 연결이 불편해진다. **현재는 Windows 폴더를 기준으로 한다.**
 
 ---
 
