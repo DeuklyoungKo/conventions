@@ -36,6 +36,7 @@ https://github.com/DeuklyoungKo/conventions 를 검토해서 이 프로젝트의
 | [`1_MODEL_SELECTION_CLAUDE_CODE.md`](./1_MODEL_SELECTION_CLAUDE_CODE.md) | **Claude Code 전용** — 업무별 모델·추론량 배치표(A~K), 지정 방법, 컨텍스트 분리. §2·§5·§6 은 도구 무관 원칙이라 다른 에이전트에도 옮겨 쓸 수 있다 |
 | [`2_DEV_PROTOCOL.md`](./2_DEV_PROTOCOL.md) | 개발·검증 프로토콜 — **완료의 정의**, Builder/QA 2중 피드백 루프, 단정 규율(**단정이 비껴가는 축 8가지**), 안전 가드레일 |
 | [`3_WORKFLOW.md`](./3_WORKFLOW.md) | 작업 흐름 — **요청 → 머지까지의 단계와 순서**. 보드에 올리기 전 사실 확인, 묻는 자리 넷, **반증은 커밋 뒤에**, QA 를 언제 멈추는가 |
+| [`4_TOOLING_TRAPS.md`](./4_TOOLING_TRAPS.md) | 환경·도구가 **조용히 틀리는 자리** — 인코딩, 종료 코드, 있는 척하는 명령, 치환 앵커, `git add -A`·되돌리기 |
 | [`data/`](./data/) | 벤더별 모델·API 레퍼런스 (가격·한도·모델 ID). **기준일 필수** |
 | [`templates/`](./templates/) | 각 PC `~/.claude/`에 들어가는 파일의 **원본** |
 
@@ -52,8 +53,9 @@ https://github.com/DeuklyoungKo/conventions 를 검토해서 이 프로젝트의
 - (이 프로젝트에 실제로 있는 문서와 각각의 상태만 적는다)
 ```
 
-**모델·추론량 배치**·**개발·검증 프로토콜**·**작업 흐름**도 같은 방식으로 링크한다 — 각각
-`1_MODEL_SELECTION_CLAUDE_CODE.md` §8, `2_DEV_PROTOCOL.md` §7, `3_WORKFLOW.md` §12 에 붙여 넣을 문구가 있다.
+**모델·추론량 배치**·**개발·검증 프로토콜**·**작업 흐름**·**환경 함정**도 같은 방식으로 링크한다 —
+각각 `1_MODEL_SELECTION_CLAUDE_CODE.md` §8, `2_DEV_PROTOCOL.md` §7, `3_WORKFLOW.md` §12,
+`4_TOOLING_TRAPS.md` §7 에 붙여 넣을 문구가 있다.
 
 또는 AI에게 이렇게 지시한다.
 
