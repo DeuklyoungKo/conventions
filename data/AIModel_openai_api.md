@@ -1,5 +1,7 @@
 # OpenAI API 티어별 사용 제한 및 Free(Tier 0) 안내
 
+> 📅 **기준일: 2026-09** — 가격·한도는 바뀐다. 쓰기 전에 [공식 문서](https://platform.openai.com/docs/guides/rate-limits)로 다시 확인한다.
+
 결제 수단 등록 여부 및 누적 충전 금액에 따른 OpenAI API의 티어 체계, 지원 모델, 속도/사용 제한(Rate Limits) 가이드입니다.
 
 ---

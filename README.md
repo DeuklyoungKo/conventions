@@ -8,10 +8,11 @@
 
 | 경로 | 내용 |
 |---|---|
-| [`0_DOC_CONVENTION.md`](./0_DOC_CONVENTION.md) | 문서 관리 규약 — SSOT 원칙, 문서 구성, Notion↔GitHub 경계 |
+| [`0_DOC_CONVENTION.md`](./0_DOC_CONVENTION.md) | 문서 관리 규약 — SSOT 원칙, 문서 구성, 작업 단위 기록 문서, Notion↔GitHub 경계 |
 | [`1_MODEL_SELECTION_CLAUDE_CODE.md`](./1_MODEL_SELECTION_CLAUDE_CODE.md) | **Claude Code 전용** — 업무별 모델·추론량 배치표(A~K), 지정 방법, 컨텍스트 분리. §2·§5·§6 은 도구 무관 원칙이라 다른 에이전트에도 옮겨 쓸 수 있다 |
-| [`data/`](./data/) | 벤더별 모델·API 레퍼런스 (가격·한도·모델 ID) |
-| [`templates/`](./templates/) | 각 PC `~/.claude/`에 들어가는 파일의 백업본 |
+| [`2_DEV_PROTOCOL.md`](./2_DEV_PROTOCOL.md) | 개발·검증 프로토콜 — **완료의 정의**, Builder/QA 2중 피드백 루프, 단정 규율, 안전 가드레일 |
+| [`data/`](./data/) | 벤더별 모델·API 레퍼런스 (가격·한도·모델 ID). **기준일 필수** |
+| [`templates/`](./templates/) | 각 PC `~/.claude/`에 들어가는 파일의 **원본** |
 
 ## 규약 적용 방법
 
@@ -26,6 +27,8 @@
 - (이 프로젝트에 실제로 있는 문서와 각각의 상태만 적는다)
 ```
 
+**모델·추론량 배치**와 **개발·검증 프로토콜**도 같은 방식으로 링크한다 — 각각 `1_MODEL_SELECTION_CLAUDE_CODE.md` §8, `2_DEV_PROTOCOL.md` §7 에 붙여 넣을 문구가 있다.
+
 또는 AI에게 이렇게 지시한다.
 
 ```
@@ -37,9 +40,14 @@ https://github.com/DeuklyoungKo/conventions/blob/main/0_DOC_CONVENTION.md
 
 ```bash
 git clone git@github.com:DeuklyoungKo/conventions.git
+cd conventions          # 아래 명령은 모두 저장소 루트 기준이다
+
 mkdir -p ~/.claude
-cp conventions/templates/CLAUDE.global.md ~/.claude/CLAUDE.md
-cp conventions/templates/android-vibe-coding-sop.md ~/.claude/
+cp templates/CLAUDE.global.md ~/.claude/CLAUDE.md
+cp templates/android-vibe-coding-sop.md ~/.claude/
 ```
+
+복사한 뒤 **`~/.claude/CLAUDE.md` 의 `MACHINE-SPECIFIC` 블록만** 그 PC의 실제 값으로 채운다.
+⚠️ 드라이브 문자나 절대경로를 적지 않는다 — 작업 폴더는 폴더명(`Work` / `Work_Gon`)으로만.
 
 상세는 [`templates/README.md`](./templates/README.md) 참조.

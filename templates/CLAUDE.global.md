@@ -251,22 +251,31 @@ npx skills add vercel-labs/agent-skills
 
 ## 실행 환경
 
-> ⚠️ **이 섹션은 머신 종속이다.** 새 PC에 복원했다면 이 부분을 그 PC에 맞게 고친다.
+<!-- MACHINE-SPECIFIC:BEGIN — 이 블록은 PC마다 다르다. 동기화 대상이 아니다. -->
 
-- **OS**: Windows 10/11 + WSL2 (Ubuntu) + Docker Desktop
-- **프로젝트 파일**: Windows 측 `Work` / `Work_Gon` 폴더 (드라이브 문자는 PC마다 다름)
-- **CLI**: PowerShell 기본. Linux 전용 도구가 필요할 때만 WSL 사용
+> ⚠️ **이 블록은 머신 종속이다.** 새 PC에 복원한 뒤 **그 PC의 실제 값으로 고쳐 쓴다.**
+> 아래는 기본 뼈대이며, 여기 적힌 내용이 그 PC와 다르면 **AI가 틀린 전제로 움직인다.**
+> (실제로 "모든 명령을 Linux에서 실행" 이라 적혀 있었으나 그 PC는 PowerShell 기준이었던 적이 있다.)
 
-**WSL에서 프로젝트에 접근할 때**
+- **OS / 셸**: (예: Windows 11 + PowerShell 기본, Linux 도구가 필요할 때만 WSL2)
+- **프로젝트 폴더**: 작업 폴더명으로만 적는다 — `Work` / `Work_Gon`
+  **드라이브 문자나 절대경로를 적지 않는다.** PC마다 다르다
+- **보조 도구**: (예: Docker Desktop, Android Studio — 그 PC에 실제로 있는 것만)
+
+**WSL에서 프로젝트에 접근할 때** (쓰는 PC만 해당)
 
 ```bash
-cd /mnt/d/Work_Gon/<프로젝트>   # 드라이브가 D인 경우
+# 드라이브 문자는 PC마다 다르므로 그때그때 확인한다
+cd /mnt/<드라이브>/Work_Gon/<프로젝트>
 ```
 
-`/mnt/`를 경유하는 파일 I/O는 느리다. **`npm install`·빌드처럼 파일을 많이 건드리는 작업은 PowerShell에서 직접 실행**한다. WSL은 `jq`·`rg` 같은 Linux 도구가 필요할 때만 쓴다.
+`/mnt/`를 경유하는 파일 I/O는 느리다. **`npm install`·빌드처럼 파일을 많이 건드리는 작업은
+PowerShell에서 직접 실행**한다. WSL은 `jq`·`rg` 같은 Linux 도구가 필요할 때만 쓴다.
 
-프로젝트를 WSL `/home/`으로 옮기면 I/O는 빨라지지만, Windows 쪽 편집기·도구와의 연결이 불편해진다. **현재는 Windows 폴더를 기준으로 한다.**
+프로젝트를 WSL `/home/`으로 옮기면 I/O는 빨라지지만 Windows 쪽 편집기·도구와의 연결이
+불편해진다. **현재는 Windows 폴더를 기준으로 한다.**
 
+<!-- MACHINE-SPECIFIC:END -->
 ---
 
 ## 사용 가능한 CLI 도구
