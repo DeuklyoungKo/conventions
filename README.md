@@ -9,6 +9,8 @@
 | 경로 | 내용 |
 |---|---|
 | [`0_DOC_CONVENTION.md`](./0_DOC_CONVENTION.md) | 문서 관리 규약 — SSOT 원칙, 문서 구성, Notion↔GitHub 경계 |
+| [`1_MODEL_SELECTION.md`](./1_MODEL_SELECTION.md) | 업무별 모델·추론량 선택 규약 — 배치표(A~K), 지정 방법, 컨텍스트 분리 |
+| [`data/`](./data/) | 벤더별 모델·API 레퍼런스 (가격·한도·모델 ID) |
 | [`templates/`](./templates/) | 각 PC `~/.claude/`에 들어가는 파일의 백업본 |
 
 ## 규약 적용 방법
