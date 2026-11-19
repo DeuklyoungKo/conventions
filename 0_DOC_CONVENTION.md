@@ -13,6 +13,7 @@
 | --- | --- |
 | [`1_MODEL_SELECTION_CLAUDE_CODE.md`](./1_MODEL_SELECTION_CLAUDE_CODE.md) | 업무별 **모델·추론량** 배치, 서브에이전트 지정 방법 (**Claude Code 전용**) |
 | [`2_DEV_PROTOCOL.md`](./2_DEV_PROTOCOL.md) | **완료의 정의**, Builder/QA 2중 피드백 루프, 단정 규율, 안전 가드레일 |
+| [`3_WORKFLOW.md`](./3_WORKFLOW.md) | **요청 → 머지까지의 단계와 순서** — 사실 확인 · 묻는 자리 · **반증 시점** · QA 를 언제 멈추는가 |
 | [`data/`](./data/) | 벤더별 모델·API 레퍼런스 (가격·한도·모델 ID) |
 | [`templates/`](./templates/) | 각 PC `~/.claude/`에 들어가는 파일의 원본 |
 
