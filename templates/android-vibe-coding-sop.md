@@ -188,7 +188,7 @@ AI는 **Phase 0 → Phase 5** 순서대로 모두 자동 처리한다.
 
 **AI가 자동 생성한다.** 총 4개 파일.
 
-### 3-A. `3_DesignGuide.md` 작성
+### 3-A. `3_Design.md` 작성
 
 ```markdown
 # [앱명] 디자인 가이드
@@ -401,7 +401,7 @@ AI가 처리할 수 없는 항목. 사용자가 직접 수행.
 |-------|------|------|---------|
 | 1 | PRD | `1_PRD.md` | AI 자동 |
 | 2 | 개발 계획서 | `2_PDP.md` | AI 자동 |
-| 3 | 디자인 가이드 | `3_DesignGuide.md` | AI 자동 |
+| 3 | 디자인 가이드 | `3_Design.md` | AI 자동 |
 | 3 | M3 색상 토큰 | `res/values/colors.xml` | AI 자동 |
 | 3 | Light 테마 | `res/values/themes.xml` | AI 자동 |
 | 3 | Dark 테마 | `res/values-night/themes.xml` | AI 자동 |
@@ -416,7 +416,7 @@ AI가 처리할 수 없는 항목. 사용자가 직접 수행.
 ```
 [ ] 1_PRD.md 생성 (기능 3단계, 수익 모델, 리스크 포함)
 [ ] 2_PDP.md 생성 (화면 명세, 코드 구조, 체크리스트 T01~T21 이상)
-[ ] 3_DesignGuide.md 생성 (색상표, 컴포넌트 스펙, 접근성 체크리스트)
+[ ] 3_Design.md 생성 (색상표, 컴포넌트 스펙, 접근성 체크리스트)
 [ ] res/values/colors.xml 생성 (Light 25개 + Dark 25개 토큰)
 [ ] res/values/themes.xml 생성 (Light, Splash 포함)
 [ ] res/values-night/themes.xml 생성 (Dark)

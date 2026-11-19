@@ -228,7 +228,7 @@ npx skills add vercel-labs/agent-skills
 ## 2. 문서 관리 체계 (Documentation Stack)
 
 > 📘 **규약 원문 (SSOT)**: https://github.com/DeuklyoungKo/conventions/blob/main/0_DOC_CONVENTION.md
-> 문서 구성(`1_PRD` · `2_PDP` · `3_DesignGuide` · `4_LRP` · `CLAUDE.md` · `dev.md`), SSOT 원칙, 갱신 트리거,
+> 문서 구성(`1_PRD` · `2_PDP` · `3_Design` · `4_LICENSE` · `CLAUDE.md` · `dev.md`), SSOT 원칙, 갱신 트리거,
 > 경로 표기 규칙, Notion↔GitHub 경계, 안티패턴은 **모두 그 문서가 소유한다. 여기서 반복하지 않는다.**
 >
 > 새 프로젝트에 이 체계를 적용하거나 기존 프로젝트를 정리할 때는 **먼저 그 URL을 읽고 따른다.**
