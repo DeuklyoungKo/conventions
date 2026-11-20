@@ -14,6 +14,32 @@
 근거가 되는 절은 `5_RPG_BALANCE_GUIDE.md` 의 번호로 주석에 달아 두었다.
 """
 import argparse
+import math
+
+
+# ── §2 수치 관계 — 곡선 다섯 꼴 ─────────────────────────────────────────
+#
+# 📌 **기법: 모양을 0~1 로 정규화한 뒤 [최소, 최대] 에 얹는다.**
+# 그러면 "양 끝을 먼저 정하고 가운데는 곡선이 채운다"(§3.1)가 그대로 구현된다.
+# 곡선을 바꿔도 **양 끝은 움직이지 않는다** — 비교가 가능해지는 이유다.
+#
+# `a` 는 세기(강도)다. 지수는 클수록 뒤가 가파르고, 로그는 클수록 앞이 가파르다.
+def shape(t, kind, a=1.0, steps=5):
+    if kind == "linear":
+        return t
+    if kind == "geom":                      # 등비 — 비율이 일정하다
+        return t                            # (요구값 자체를 등비로 깔 때 쓴다)
+    if kind == "exp":                       # 뒤로 갈수록 가파르다
+        return (pow(1 + a, t) - 1) / (pow(1 + a, 1) - 1)
+    if kind == "log":                       # 앞이 가파르고 뒤가 눕는다
+        return math.log(1 + a * t) / math.log(1 + a)
+    if kind == "sigmoid":                   # 가운데가 가파른 S 꼴
+        f = lambda x: 1 / (1 + math.exp(-a * (x - 0.5)))
+        lo, hi = f(0.0), f(1.0)
+        return (f(t) - lo) / (hi - lo)
+    if kind == "step":                       # 구간으로 끊어 오른다
+        return round(steps * t) / steps
+    raise SystemExit("알 수 없는 곡선: %s" % kind)
 
 
 def build(a):
@@ -21,8 +47,15 @@ def build(a):
 
     # ── §2 수치 관계 — 요구 공격력은 **등비**로 둔다 ─────────────────────
     # 선형으로 두면 뒤 구역에서 상대적 성장이 0 에 수렴해 "평평한 칸" 이 생긴다.
-    g = (a.atk_last / a.atk_first) ** (1.0 / (n - 1)) if n > 1 else 1.0
-    req = [a.atk_first * (g ** i) for i in range(n)]       # 구역별 요구 ATK
+    if a.curve == "geom":
+        # 등비 — 구역마다 **같은 비율**로 오른다. 뒤 구역에서도 상대 성장이 유지된다.
+        g = (a.atk_last / a.atk_first) ** (1.0 / (n - 1)) if n > 1 else 1.0
+        req = [a.atk_first * (g ** i) for i in range(n)]
+    else:
+        # 그 외는 모양을 0~1 로 정규화해 양 끝에 얹는다(§3.1).
+        req = [a.atk_first + (a.atk_last - a.atk_first)
+               * shape(i / max(1, n - 1), a.curve, a.curve_param, a.curve_steps)
+               for i in range(n)]
     prev = [a.unarmed] + req[:-1]                          # 그 구역에 들고 오는 앞 구역 장비
 
     # ── 플레이어 쪽 성장 (선형 가정 — 게임마다 다르므로 입력으로 뺀다) ──
@@ -154,6 +187,11 @@ def main():
     p.add_argument("--ttk-boss-lose", type=float, default=16,
                    help="보스 패배 하한 턴 (승리 턴보다 길어야 한다)")
     p.add_argument("--max-leak", type=float, default=0.25, help="앞 장비 누출 상한")
+    p.add_argument("--curve", default="geom",
+                   choices=["geom", "linear", "exp", "log", "sigmoid", "step"],
+                   help="요구 공격력이 자라는 모양 (§2). 기본 geom=등비")
+    p.add_argument("--curve-param", type=float, default=1.3, help="곡선 세기")
+    p.add_argument("--curve-steps", type=int, default=5, help="step 곡선의 계단 수")
     a = p.parse_args()
 
     print("# 유도된 밸런스 표")
@@ -161,9 +199,9 @@ def main():
     print("> ⚠️ **이 수치는 아래 입력에서 유도된 것이다.** 입력이 바뀌면 표가 바뀐다.")
     print("> 옮겨 적지 말고 필요할 때 다시 돌린다.")
     print(">")
-    print("> 입력: 구역 %d · 티어 %d · 방어 %s · TTK 일반 %g / 보스 승 %g · 패 %g · 누출 상한 %g%%"
-          % (a.zones, a.tiers, a.defense, a.ttk_normal, a.ttk_boss_win, a.ttk_boss_lose,
-             a.max_leak * 100))
+    print("> 입력: 구역 %d · 티어 %d · 곡선 %s · 방어 %s · TTK 일반 %g / 보스 승 %g · 패 %g · 누출 상한 %g%%"
+          % (a.zones, a.tiers, a.curve, a.defense, a.ttk_normal, a.ttk_boss_win,
+             a.ttk_boss_lose, a.max_leak * 100))
     print()
     return report(build(a), a)
 
