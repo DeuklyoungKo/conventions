@@ -12,7 +12,7 @@
 | 문서 | 소유하는 것 |
 | --- | --- |
 | [`1_MODEL_SELECTION_CLAUDE_CODE.md`](./1_MODEL_SELECTION_CLAUDE_CODE.md) | 업무별 **모델·추론량** 배치, 서브에이전트 지정 방법 (**Claude Code 전용**) |
-| [`2_DEV_PROTOCOL.md`](./2_DEV_PROTOCOL.md) | **완료의 정의**, Builder/QA 2중 피드백 루프, 단정 규율, 안전 가드레일 |
+| [`2_DEV_PROTOCOL.md`](./2_DEV_PROTOCOL.md) | **완료의 정의**, Builder/QA 2중 피드백 루프, 단정 규율, 안전 가드레일, **보고 언어**(§2.5 — 결과를 말할 때 은유를 쓰지 않는다) |
 | [`3_WORKFLOW.md`](./3_WORKFLOW.md) | **요청 → 머지까지의 단계와 순서** — 사실 확인 · 묻는 자리 · **반증 시점** · QA 를 언제 멈추는가 |
 | [`4_TOOLING_TRAPS.md`](./4_TOOLING_TRAPS.md) | 환경·도구가 **조용히 틀리는 자리** — 인코딩 · 종료 코드 · 있는 척하는 명령 · `git add -A` |
 | [`data/`](./data/) | 벤더별 모델·API 레퍼런스 (가격·한도·모델 ID) |
